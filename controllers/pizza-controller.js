@@ -18,7 +18,7 @@ const pizzaController = {
 
     // get one pizza by id
     // GET /api/pizzas/:id
-    getPizzById({ params }, routes) {
+    getPizzaById({ params }, res) {
         // we destructured the req for only the id 
         // we did not need the whole req.
         Pizza.findOne({ _id: params.id })

@@ -15,7 +15,7 @@ app.use(require('./routes'));
 // MONGODB_URI will be used for heroku later.
 // Short circuits and uses localdb for now.
 // If there is no db with that name...mongo will create it.
-mongoose.connect(process.env.MONGODB_URI || 'mongodb:localhost:27017/pizza-hunt', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/pizza-hunt', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 
