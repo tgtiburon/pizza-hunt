@@ -7,8 +7,19 @@ const pizzaController = {
 
     // get all pizzas
     // GET /api/pizzas      
-    getAllPizza(req,res) {
+    getAllPizzas(req,res) {
         Pizza.find({})
+        // this populate acts like a join so we can get the comment 
+        // info
+        .populate({
+            path: 'comments',
+           // Don't select __v. Without this it would ONLY send __v
+            select: '-__v'
+        })
+        // update query to not include __v either
+        .select('-__v')
+        // lets sort the query by ages of post -1 desc order
+        .sort({ _id: -1 })
         .then(dbPizzaData => res.json(dbPizzaData))
         .catch(err => {
             console.log(err);
@@ -22,19 +33,26 @@ const pizzaController = {
         // we destructured the req for only the id 
         // we did not need the whole req.
         Pizza.findOne({ _id: params.id })
-        .then(dbPizzaData => {
-            // If no pizza found send 404
-            if(!dbPizzaData) {
-                res.status(404).json({ message: 'No pizza found with this id!' });
-                return;
-            }
-            // Pizza found send json data
-            res.json(dbPizzaData)
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(400).json(err);
-        });
+        // Join comments
+            .populate({
+                path: 'comments',
+                select: '-__v'
+            })
+            // don't select -__v
+            .select('-__v')
+            .then(dbPizzaData => {
+                // If no pizza found send 404
+                if(!dbPizzaData) {
+                    res.status(404).json({ message: 'No pizza found with this id!' });
+                    return;
+                }
+                // Pizza found send json data
+                res.json(dbPizzaData)
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(400).json(err);
+            });
     },
 
     // POST /api/pizzas

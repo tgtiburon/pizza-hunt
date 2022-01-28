@@ -2,24 +2,39 @@
 const { Schema, model } = require('mongoose');
 
 
-const PizzaSchema = new Schema({
-    pizzaName: {
-        type:String
+const PizzaSchema = new Schema(
+    {
+        pizzaName: {
+            type:String
+        },
+        createdBy: {
+            type: String
+        },
+        createdAt: {
+            type: Date, 
+            default: Date.now
+        },
+        size: {
+            type: String,
+            default: 'Large'
+        },
+        // toppings is array datatype. could do toppings: Array   too.
+        toppings: [], 
+        comments: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Comment'
+            }
+        ]
     },
-    createdBy: {
-        type: String
-    },
-    createdAt: {
-        type: Date, 
-        default: Date.now
-    },
-    size: {
-        type: String,
-        default: 'Large'
-    },
-    // toppings is array datatype. could do toppings: Array   too.
-    toppings: []
-});
+    {
+        toJSON: {
+            virtuals: true,
+        },
+        // Don't send the virtual
+        id: false
+    }
+);
 
 
 // create the Pizza Model using the PizzaSchema

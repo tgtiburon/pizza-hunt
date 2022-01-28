@@ -4,7 +4,7 @@ const router = require('express').Router();
 // instead of importing the entire object we deconstruct it.
 // that way we can use the names directly
 const {
-    getAllPizza,
+    getAllPizzas,
     getPizzaById,
     createPizza,
     updatePizza,
@@ -29,7 +29,7 @@ router.post('/' postCallbackFunction);
 // Set up the GET and POST at /api/pizzas
 router
     .route('/')
-    .get(getAllPizza)
+    .get(getAllPizzas)
     .post(createPizza);
 
 
