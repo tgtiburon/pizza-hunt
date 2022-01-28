@@ -1,4 +1,4 @@
-const res = require('express/lib/response');
+//const res = require('express/lib/response');
 const { Comment, Pizza }   = require('../models');
 
 
@@ -37,6 +37,42 @@ const commentController = {
 
      
 
+    },
+    // add reply
+    addReply({ params, body }, res) {
+        Comment.findOneAndUpdate(
+            { _id: params.commentId },
+            { $push: { replies: body } },
+            { new: true }
+        )
+            .then(dbPizzaData => {
+                // no pizza
+                if(!dbPizzaData) {
+                    res.status(404).json({ message: 'No pizza found with this id!' });
+                    return;
+                }
+                // pizza found
+                res.json(dbPizzaData);
+            })
+            .catch(err => {
+                res.json(err);
+            })
+    },
+    // remove reply
+    removeReply({ params }, res) {
+        Comment.findOneAndUpdate(
+            { _id: params.commentId },
+            // We are using mongo $pull to remove the specific 
+            // reply from the replies array
+            { $pull: { replies: { replyId: params.replyId } } },
+            { new: true }
+        )
+            .then(dbPizzaData => {
+                res.json(dbPizzaData);
+            })
+            .catch(err => {
+                res.json(err);
+            })
     },
 
     // remove comment
