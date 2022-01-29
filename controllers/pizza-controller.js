@@ -74,7 +74,7 @@ const pizzaController = {
     updatePizza({ params, body }, res) {
         // by setting new:true we are telling mongoose to return the new
         // updated document.
-        Pizza.findOneAndUpdate({ _id: params.id }, body, { new:true })  
+        Pizza.findOneAndUpdate({ _id: params.id }, body, { new:true, runValidators: true })  
         .then(dbPizzaData => {
             // Can't find id
             if(!dbPizzaData) {
